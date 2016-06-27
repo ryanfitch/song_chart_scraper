@@ -5,16 +5,15 @@ require 'dotenv'
 require 'pry'
 Dotenv.load
 # load 'Gemfile'
-load 'song.rb'
 load 'spotify_search.rb'
+load 'song.rb'
 
 
 songs = []
-time_stamp = Time.now
-RSpotify.authenticate("#{ENV['SPOTIFY_TOKEN']}", "#{ENV['SPOTIFY_SECRET']}")
 userID = RSpotify::User.find('eshea89')
 
+spotify_user_playlist_search(userID, songs)
 
-spotify_user_playlist_search(userID, time_stamp, songs)
+spotify_audiofeatures_search(songs)
 
 pry(binding)

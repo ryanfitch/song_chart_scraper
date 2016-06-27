@@ -1,5 +1,9 @@
-def spotify_user_playlist_search (userID, time_stamp, songs)
+RSpotify.authenticate("#{ENV['SPOTIFY_TOKEN']}", "#{ENV['SPOTIFY_SECRET']}")
+
+
+def spotify_user_playlist_search (userID, songs)
   latest_playlist = userID.playlists.first
+  time_stamp = Time.now
   counter = 1
 
   latest_playlist.tracks.each do |track|
@@ -8,7 +12,7 @@ def spotify_user_playlist_search (userID, time_stamp, songs)
     t_id.track_name = track.name
     t_id.spotify_track_id = track.id
     t_id.artist_name = track.artists.first.name
-    t_id.pos = counter
+    t_id.position = counter
     counter += 1
     t_id.time_of_scraping = time_stamp.strftime("%A %B/%d/%Y")
     songs << t_id
@@ -26,3 +30,29 @@ def spotify_user_playlist_search (userID, time_stamp, songs)
   end
 end
 
+
+def spotify_audiofeatures_search(songs)
+  songs.each do |song|
+    audio_features = RSpotify::AudioFeatures.find(song.spotify_track_id)
+    if audio_features.tempo.nil?
+      song.tempo = "N/A"
+    else
+      song.track_tempo = audio_features.tempo.to_s
+    end
+    if audio_features.danceability.nil?
+      song.spotify_track_dancibility = "N/A"
+    else
+      song.spotify_track_dancibility = audio_features.danceability.to_s
+    end
+    if audio_features.instrumentalness.nil?
+      song.spotify_track_instrumentalness = "N/A"
+    else
+      song.spotify_track_instrumentalness = audio_features.instrumentalness.to_s
+    end
+    if audio_features.valence.nil?
+      song.spotify_track_positiveness = "N/A"
+    else
+      song.spotify_track_positiveness = audio_features.valence.to_s
+    end
+  end
+end
