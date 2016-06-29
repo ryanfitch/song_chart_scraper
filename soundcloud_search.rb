@@ -1,7 +1,9 @@
-def soundcloud_search(songs)
+def soundcloud_search(songs, sc_kind, sc_link_pos)
+  sc_links = ["", "all-music", "indie", "electronic", "rbsoul", "classical", "pop", "folksingersongwriter", "hiphoprap"]
+  sc_link = sc_links[sc_link_pos]
   time_stamp = Time.now
   counter = 1
-  response = HTTParty.get("https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud:genres:indie&client_id=#{ENV['SOUNDCLOUD_CLIENT_ID']}&offset=0&kind=top&limit=10")
+  response = HTTParty.get("https://api-v2.soundcloud.com/charts?kind=#{sc_kind}&genre=soundcloud:genres:#{sc_link}&client_id=#{ENV['SOUNDCLOUD_CLIENT_ID']}&offset=0&limit=50")
   response['collection'].each do |item|
     t_id = Song.new
     t_id.artist_name = item['track']['user']['username']

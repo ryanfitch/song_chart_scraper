@@ -1,14 +1,14 @@
 require 'mechanize'
-require 'rspotify'
-require 'koala'
-require 'dotenv'
-require 'pry'
 require 'httparty'
+require 'rspotify'
+require 'dotenv'
+require 'koala'
+require 'pry'
 Dotenv.load
-load 'spotify_search.rb'
-load 'facebook_search.rb'
 load 'song.rb'
 load 'soundcloud_search.rb'
+load 'facebook_search.rb'
+load 'spotify_search.rb'
 
 songs = []
 
@@ -19,8 +19,8 @@ songs = []
 # facebook_search(songs)
 
 
-soundcloud_search(songs)
-spotify_gen_info_search(songs)
-facebook_search(songs)
+soundcloud_search(songs, "top", 1)
+# spotify_gen_info_search(songs)
+# facebook_search(songs)
 pry(binding)
 
