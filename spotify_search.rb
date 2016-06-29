@@ -20,13 +20,8 @@ def spotify_user_playlist_search (userID, songs)
 
   songs.each do |song|
     spotify_artist = RSpotify::Artist.search("#{song.artist_name}")
-    if spotify_artist.empty?
-      song.spotify_popularity = "N/A"
-      song.spotify_link = "N/A"
-    else
-      song.spotify_popularity = spotify_artist.last.popularity.to_s
-      song.spotify_link = spotify_artist.last.external_urls['spotify']
-    end
+    song.spotify_popularity = spotify_artist.last.popularity.to_s
+    song.spotify_link = spotify_artist.last.external_urls['spotify']
   end
 end
 
@@ -34,25 +29,22 @@ end
 def spotify_audiofeatures_search(songs)
   songs.each do |song|
     audio_features = RSpotify::AudioFeatures.find(song.spotify_track_id)
-    if audio_features.tempo.nil?
-      song.tempo = "N/A"
+    song.track_tempo = audio_features.tempo.to_s
+    song.spotify_track_dancibility = audio_features.danceability.to_s
+    song.spotify_track_instrumentalness = audio_features.instrumentalness.to_s
+    song.spotify_track_positiveness = audio_features.valence.to_s
+  end
+end
+
+def spotify_gen_info_search(songs)
+  songs.each do |song|
+    spotify_artist = RSpotify::Artist.search("#{song.artist_name}")
+    if spotify_artist.empty?
+      song.spotify_popularity = nil
+      song.spotify_link = nil
     else
-      song.track_tempo = audio_features.tempo.to_s
-    end
-    if audio_features.danceability.nil?
-      song.spotify_track_dancibility = "N/A"
-    else
-      song.spotify_track_dancibility = audio_features.danceability.to_s
-    end
-    if audio_features.instrumentalness.nil?
-      song.spotify_track_instrumentalness = "N/A"
-    else
-      song.spotify_track_instrumentalness = audio_features.instrumentalness.to_s
-    end
-    if audio_features.valence.nil?
-      song.spotify_track_positiveness = "N/A"
-    else
-      song.spotify_track_positiveness = audio_features.valence.to_s
+      song.spotify_popularity = spotify_artist.last.popularity.to_s
+      song.spotify_link = spotify_artist.last.external_urls['spotify']
     end
   end
 end
