@@ -1,5 +1,5 @@
 def soundcloud_search(sc_kind, sc_link_pos)
-  puts "data scraping Soundcloud..."
+  puts "Grabbing chart data from Soundcloud..."
   sc_links = ["", "all-music", "indie", "electronic", "rbsoul", "classical", "pop", "folksingersongwriter", "hiphoprap"]
   sc_link = sc_links[sc_link_pos]
   time_stamp = Time.now
@@ -19,4 +19,4 @@ def soundcloud_search(sc_kind, sc_link_pos)
     songs << t_id
   end
   songs
-end  
+end

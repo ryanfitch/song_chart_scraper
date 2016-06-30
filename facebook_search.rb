@@ -1,5 +1,5 @@
 def facebook_search(songs)
-  puts "data scraping Facebook..."
+  puts "Grabbing artist data from Facebook..."
   songs.each do |song|
     graph = Koala::Facebook::API.new("#{ENV['FB_TOKEN']}")
     search = graph.get_object("search?q=#{song.artist_name}&type=page")

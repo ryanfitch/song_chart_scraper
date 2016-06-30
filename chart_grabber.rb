@@ -9,12 +9,10 @@ load 'song.rb'
 load 'soundcloud_search.rb'
 load 'facebook_search.rb'
 load 'spotify_search.rb'
+load 'csv_maker.rb'
 
 
-# userID = RSpotify::User.find('eshea89')
-# spotify_user_playlist_search(userID, songs)
-# spotify_audiofeatures_search(songs)
-# facebook_search(songs)
+
 
 
 # soundcloud_search(songs, "top", 1)
@@ -51,10 +49,53 @@ if ans1 == 1
   end
   songs = soundcloud_search(sc_kind, ans3)
   spotify_gen_info_search(songs)
-  facebook_search(songs)
-  songs.each do |song|
-    puts song.check_out
+  # facebook_search(songs)
+  puts "Hit 1 - See Chart Song Info"
+  puts "Hit 2 - Export CSV File of Chart Song Info"
+  answer7 = gets.chomp.to_i
+  if answer7 == 1
+    songs.each do |song|
+      puts song.check_out
+    end
+  elsif answer7 == 2
+    make_soundcloud_csv(SOUNDCLOUD_CHART_HEADERS, songs)
   end
+
+
 else
-  puts "not 1"
+  puts "Latest Spotify Playlist Search"
+  puts "Hit 1 - Latest playlist from user: eshea89 called Maimed & Tamed"
+  puts "Hit 2 - Latest playlist from user: ryanfitch"
+  puts "Hit 3 - Enter a different Spotify user"
+  answer5 = gets.chomp.to_i
+  if answer5 == 1
+    userID = RSpotify::User.find('eshea89')
+    songs = spotify_user_playlist_search(userID)
+    spotify_audiofeatures_search(songs)
+    # facebook_search(songs)
+  elsif answer5 == 2
+    userID = RSpotify::User.find('ryanfitch')
+    songs = spotify_user_playlist_search(userID)
+    spotify_audiofeatures_search(songs)
+    # facebook_search(songs)
+  elsif answer5 == 3
+    puts "Latest Spotify search for which Spotify user name?"
+    answer6 = gets.chomp.to_s
+    userID = RSpotify::User.find("#{answer6}")
+    songs = spotify_user_playlist_search(userID)
+    spotify_audiofeatures_search(songs)
+    # facebook_search(songs)
+  else
+    puts "I didn't catch that."
+  end
+  puts "Hit 1 - See Playlist Song Info"
+  puts "Hit 2 - Export CSV File of Playlist Song Info"
+  answer8 = gets.chomp.to_i
+  if answer8 == 1
+    songs.each do |song|
+      puts song.check_out
+    end
+  elsif answer8 == 2
+    make_spotify_csv(SPOTIFY_PLAYLIST_HEADERS, songs)
+  end
 end

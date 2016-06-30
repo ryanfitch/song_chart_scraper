@@ -1,11 +1,12 @@
 RSpotify.authenticate("#{ENV['SPOTIFY_TOKEN']}", "#{ENV['SPOTIFY_SECRET']}")
 
 
-def spotify_user_playlist_search (userID, songs)
-  puts "data scraping Spotify..."
+def spotify_user_playlist_search (userID)
+  puts "Grabbing song & artist data from Spotify..."
   latest_playlist = userID.playlists.first
   time_stamp = Time.now
   counter = 1
+  songs = []
 
   latest_playlist.tracks.each do |track|
     t_id = Song.new
@@ -24,6 +25,7 @@ def spotify_user_playlist_search (userID, songs)
     song.spotify_popularity = spotify_artist.last.popularity.to_s
     song.spotify_link = spotify_artist.last.external_urls['spotify']
   end
+  songs
 end
 
 
@@ -38,6 +40,7 @@ def spotify_audiofeatures_search(songs)
 end
 
 def spotify_gen_info_search(songs)
+  puts "Grabbing song & artist data from Spotify..."
   songs.each do |song|
     spotify_artist = RSpotify::Artist.search("#{song.artist_name}")
     if spotify_artist.any?
