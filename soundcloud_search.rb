@@ -1,7 +1,9 @@
-def soundcloud_search(songs, sc_kind, sc_link_pos)
+def soundcloud_search(sc_kind, sc_link_pos)
+  puts "data scraping Soundcloud..."
   sc_links = ["", "all-music", "indie", "electronic", "rbsoul", "classical", "pop", "folksingersongwriter", "hiphoprap"]
   sc_link = sc_links[sc_link_pos]
   time_stamp = Time.now
+  songs = []
   counter = 1
   response = HTTParty.get("https://api-v2.soundcloud.com/charts?kind=#{sc_kind}&genre=soundcloud:genres:#{sc_link}&client_id=#{ENV['SOUNDCLOUD_CLIENT_ID']}&offset=0&limit=50")
   response['collection'].each do |item|
@@ -16,4 +18,5 @@ def soundcloud_search(songs, sc_kind, sc_link_pos)
     t_id.time_of_scraping = time_stamp.strftime("%A %B/%d/%Y")
     songs << t_id
   end
+  songs
 end  

@@ -2,6 +2,7 @@ RSpotify.authenticate("#{ENV['SPOTIFY_TOKEN']}", "#{ENV['SPOTIFY_SECRET']}")
 
 
 def spotify_user_playlist_search (userID, songs)
+  puts "data scraping Spotify..."
   latest_playlist = userID.playlists.first
   time_stamp = Time.now
   counter = 1
@@ -39,10 +40,7 @@ end
 def spotify_gen_info_search(songs)
   songs.each do |song|
     spotify_artist = RSpotify::Artist.search("#{song.artist_name}")
-    if spotify_artist.empty?
-      song.spotify_popularity = nil
-      song.spotify_link = nil
-    else
+    if spotify_artist.any?
       song.spotify_popularity = spotify_artist.last.popularity.to_s
       song.spotify_link = spotify_artist.last.external_urls['spotify']
     end
